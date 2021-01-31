@@ -4,9 +4,9 @@ FROM tensorflow/tensorflow
 RUN apt-get update -y && \
     apt-get install -y python-pip python-dev
 
-COPY ./requirements.txt /code/requirements.txt
+COPY ./requirements.txt /src/requirements.txt
 
-WORKDIR /code/
+WORKDIR /src/
 
 RUN apt-get install ffmpeg libjpeg-dev libsm6 libxext6  -y
 
