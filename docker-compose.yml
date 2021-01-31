@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  web:
+
+    build: ./docker
+    
+    ports:
+      - "5000:5000"
+
+    volumes:
+      - "/home/phytter/Documents/Projects/server-recognition/code/:/code"
