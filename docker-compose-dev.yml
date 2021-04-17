@@ -1,12 +1,14 @@
 version: '3'
 
 services:
-  api:
+  api_fast:
 
-    build: ./docker/Dockerfile-dev
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile-dev
     
     ports:
-      - "5000:5000"
+      - "8000:8000"
 
     volumes:
       - "/home/phytter/Documents/Projects/recognition-server/src/:/app"
