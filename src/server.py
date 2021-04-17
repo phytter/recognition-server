@@ -18,10 +18,10 @@ def auc(y_true, y_pred):
 	keras.backend.get_session().run(tf.local_variables_initializer())
 	return auc
 
-model = tf.keras.models.load_model('./mydata_modelo_1_argumented.h5', custom_objects={'auc': auc})
+model = tf.keras.models.load_model('./model.h5', custom_objects={'auc': auc})
 
 @app.route('/predict' , methods=['POST'])
-def mask_image():
+def predict_image():
 
 	file = request.files['image'].read() ## byte file
 	npimg = np.fromstring(file, np.uint8)
@@ -29,30 +29,20 @@ def mask_image():
 
 	img = Image.fromarray(img.astype("uint8"))
 	img = img.resize((299, 299))
-	# rawBytes = io.BytesIO()
-	# img.save(rawBytes, "JPEG")
-	# rawBytes.seek(0)
-	# img_base64 = base64.b64encode(rawBytes.read())
 
 	x = np.asarray(img) / 255
 	x = np.expand_dims(x, axis=0)
 	
 	images = np.vstack([x])
 	previsao = model.predict(images)
+	predict_label = str(np.array(classes)[np.argmax(previsao, axis=-1)].tolist()[0])
+	score = str(np.amax(previsao))
+	
+	return jsonify({'label': predict_label, 'score': score})
 
-	return jsonify({'label':str(np.array(classes)[np.argmax(previsao, axis=-1)].tolist()[0]), 'score': str(np.amax(previsao))})
-
-@app.route("/hello", methods=["GET"])
-def hello_world():
-    return {"hello": "World"}
-
-# @app.after_request
-# def after_request(response):
-#     print("log: setting cors" , file = sys.stderr)
-#     response.headers.add('Access-Control-Allow-Origin', '*')
-#     response.headers.add('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept,Authorization')
-#     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
-#     return response
+@app.route("/", methods=["GET"])
+def checkHealth():
+    return {"status": "ok"}
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=False, host='0.0.0.0')

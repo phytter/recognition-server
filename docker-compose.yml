@@ -1,12 +1,11 @@
 version: '3'
 
 services:
-  web:
+  api:
 
-    build: ./docker
+    build:
+        context: .
+        dockerfile: ./docker/Dockerfile
     
     ports:
       - "5000:5000"
-
-    volumes:
-      - "/home/phytter/Documents/Projects/server-recognition/src/:/src"
