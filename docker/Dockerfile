@@ -24,8 +24,11 @@ RUN apt-get install wget
 
 RUN pip install fastapi[all]
 
-RUN wget https://storage.googleapis.com/base_dados/models/my_data_model2_normal_extractormaster.h5
+RUN wget https://storage.googleapis.com/base_dados/models/model_2_best.h5
 
-RUN mv my_data_model2_normal_extractormaster.h5 recognition/model.h5
+RUN mv model_2_best.h5 recognition/model.h5
 
-ENTRYPOINT [ "uvicorn", "main:app", "--host", "0.0.0.0", "--reload" ]
+EXPOSE 8000
+
+# ENTRYPOINT [ "uvicorn", "main:app", "--host", "0.0.0.0", "--reload" ]
+ENTRYPOINT [ "python", "main.py"]
